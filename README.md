@@ -537,7 +537,7 @@ server {
         proxy_pass http://myweb;
     }
 }' > /etc/nginx/sites-available/jarkom```
-
+```
 ### Client
 pada client lakukan installasi ```lynx``
 ```
