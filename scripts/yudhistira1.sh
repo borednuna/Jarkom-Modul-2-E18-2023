@@ -27,21 +27,22 @@ $TTL    604800
                          604800 )       ; Negative Cache TTL
 ;
 @       IN      NS      abimanyu.e18.com.
-@       IN      A       192.215.2.2 ;ip yudhistira
+@       IN      A       192.215.1.4 ;ip abimanyu
 parikesit   IN  A       192.215.1.4 ;ip abimanyu
 @       IN      AAAA    ::1
+www     IN      CNAME   abimanyu.e18.com.
 ' > /etc/bind/jarkom/abimanyu.e18.com
 #restart Bind9
 service bind9 restart
 #--nomor5--
 #tambahkan konfigurasi berikut
 echo'
-zone "2.215.192.in-addr.arpa" {
+zone "1.215.192.in-addr.arpa" {
     type master;
-    file "/etc/bind/jarkom/2.215.192.in-addr.arpa";
+    file "/etc/bind/jarkom/1.215.192.in-addr.arpa";
 };' > /etc/bind/named.conf.local
 
-cp /etc/bind/db.local /etc/bind/jarkom/2.215.192.in-addr.arpa
+cp /etc/bind/db.local /etc/bind/jarkom/1.215.192.in-addr.arpa
 
 #masukkan konfigurasi berikut
 echo'
@@ -56,8 +57,8 @@ $TTL    604800
                         2419200         ; Expire
                          604800 )       ; Negative Cache TTL
 ;
-2.215.192.in-addr.arpa.    IN  NS  abimanyu.e18.com.
-2   IN  PTR    abimanyu.e18.com. ;byte ke-4 ip yudhistira
+1.215.192.in-addr.arpa.    IN  NS  abimanyu.e18.com.
+4   IN  PTR    abimanyu.e18.com. ;byte ke-4 ip abimanyu
 ' > /etc/bind/jarkom/abimanyu.e18.com
 #restart Bind9
 service bind9 restart
@@ -71,6 +72,14 @@ zone "abimanyu.e18.com" {
 	file "/etc/bind/jarkom/abimanyu.e18.com";
     allow-transfer { 192.215.2.3; }; //IP Werkudara
 };' > /etc/bind/named.conf.local
+
+echo 'options{
+        directory "/var/cache/bind";
+        // dnssec-validation auto;
+        allow-query{any;};
+        auth-nxdomain no;
+        listen-on-v6{ any; };
+};' > /etc/bind/named.conf.options
 
 #lakukan restart
 service bind9 restart
