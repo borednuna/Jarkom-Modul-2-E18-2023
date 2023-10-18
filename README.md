@@ -474,7 +474,7 @@ server {
 Setelah selesai lakukan perintah ```symlink``` dengan perintah sebagai berikut:
 ```ln -s /etc/nginx/sites-available/jarkom /etc/nginx/sites-enabled/jarkom```
 
-jangan lupa lakukan perintah ```rm /etc/nginx/sites-enabled/default``` untuk menghapus file ```default``` supaya tidak bertabrakan pada saat kta melakukan installasi ```nginx``
+jangan lupa lakukan perintah ```rm /etc/nginx/sites-enabled/default``` untuk menghapus file ```default``` supaya tidak bertabrakan pada saat kta melakukan installasi ```nginx```
 
 kemudian lakukan restart ```nginx``` dengan cara ```service nginx restart```
 
@@ -507,7 +507,8 @@ ln -s /etc/nginx/sites-available/jarkom /etc/nginx/sites-enabled/jarkom
 
 rm /etc/nginx/sites-enabled/default
 
-service nginx restart```
+service nginx restart
+```
 
 Setelah selesai di jalankan, kita dapat melakukan perintah:
 ```lynx http://arjuna.e18.com``` pada semua client
@@ -547,5 +548,342 @@ apt-get install lynx -y
 kemudian jalankan perintah
 ```lynx http://arjuna.e18.com```
 
+## Soal 11
+Selain menggunakan Nginx, lakukan konfigurasi Apache Web Server pada worker Abimanyu dengan web server www.abimanyu.yyy.com. Pertama dibutuhkan web server dengan DocumentRoot pada /var/www/abimanyu.yyy
+
+Ganti ip pada ```Yudhistira``` menuju ```Abimanyu``` Lakukan perintah ```nano /etc/bind/jarkom/abimanyu.e18.com``` pada Yudhistira kemudian isikan konfigurasi berikut:
+```
+<VirtualHost *:80>
+  ServerAdmin webmaster@localhost
+  DocumentRoot /var/www/abimanyu.e18
+  ServerName abimanyu.e18.com
+  ServerAlias www.abimanyu.e18.com
+
+  <Directory /var/www/abimanyu.e18/index.php/home>
+          Options +Indexes
+  </Directory>
+
+  Alias "/home" "/var/www/abimanyu.e18/index.php/home"
+
+  ErrorLog ${APACHE_LOG_DIR}/error.log
+  CustomLog ${APACHE_LOG_DIR}/access.log combined
+</VirtualHost>
+```
+atau bisa juga dengan script berikut:
+```
+echo -e '<VirtualHost *:80>
+  ServerAdmin webmaster@localhost
+  DocumentRoot /var/www/abimanyu.e18
+  ServerName abimanyu.e18.com
+  ServerAlias www.abimanyu.e18.com
+
+  <Directory /var/www/abimanyu.e18/index.php/home>
+          Options +Indexes
+  </Directory>
+
+  Alias "/home" "/var/www/abimanyu.e18/index.php/home"
+
+  ErrorLog ${APACHE_LOG_DIR}/error.log
+  CustomLog ${APACHE_LOG_DIR}/access.log combined
+</VirtualHost>' > /etc/apache2/sites-available/abimanyu.e18.com.conf
+```
+Setelah itu lakukan rstart apache2 dengan perintah ```service apache2 restart```
+### Client
+Pada client lakukan perintah ```lynx abimanyu.e18.com```
+
+## Soal 12
+Setelah itu ubahlah agar url www.abimanyu.yyy.com/index.php/home menjadi www.abimanyu.yyy.com/home.
+
+Untuk soal diatas lakukan konfigurasi pada folder ```/etc/apache2/sites-available/abimanyu.e18.com.conf``` dengan perintah ```nano /etc/apache2/sites-available/abimanyu.e18.com.conf``` isikan konfigurasi sebagai berikut:
+```<VirtualHost *:80>
+  ServerAdmin webmaster@localhost
+  DocumentRoot /var/www/abimanyu.e18
+  ServerName abimanyu.e18.com
+  ServerAlias www.abimanyu.e18.com
+
+  <Directory /var/www/abimanyu.e18/index.php/home>
+          Options +Indexes
+  </Directory>
+
+  Alias "/home" "/var/www/abimanyu.e18/index.php/home"
+
+  ErrorLog ${APACHE_LOG_DIR}/error.log
+  CustomLog ${APACHE_LOG_DIR}/access.log combined
+</VirtualHost>
+```
+atau juga bisa menjalankan script sebagai berikut:
+```
+echo -e '<VirtualHost *:80>
+  ServerAdmin webmaster@localhost
+  DocumentRoot /var/www/abimanyu.e18
+  ServerName abimanyu.e18.com
+  ServerAlias www.abimanyu.e18.com
+
+  <Directory /var/www/abimanyu.e18/index.php/home>
+          Options +Indexes
+  </Directory>
+
+  Alias "/home" "/var/www/abimanyu.e18/index.php/home"
+
+  ErrorLog ${APACHE_LOG_DIR}/error.log
+  CustomLog ${APACHE_LOG_DIR}/access.log combined
+</VirtualHost>' > /etc/apache2/sites-available/abimanyu.e18.com.conf
+```
+setelah itu lakukan restart apache2 dengan perintah ```service apache2 restart```
+Disini kita juga menambahkan directory untuk melakukan rewrite index supaya dapat membuat ``` Alias "/home" "/var/www/abimanyu.e18/index.php/home"``` script sebagai berikut:
+```
+<Directory /var/www/abimanyu.e18/index.php/home>
+          Options +Indexes
+  </Directory>
+
+  Alias "/home" "/var/www/abimanyu.e18/index.php/home"
+```
+### Client
+pada client jalankan perintah
+```
+lynx abimanyu.a09.com/home
+curl abimanyu.a09.com/home
+```
+
+## Soal 13
+Selain itu, pada subdomain www.parikesit.abimanyu.yyy.com, DocumentRoot disimpan pada /var/www/parikesit.abimanyu.yyy
+
+Di Abimanyu lakukan konfigurasi pada folder ```/etc/apache2/sites-available/parikesit.abimanyu.e18.com.conf``` dengan perintah ```nano /etc/apache2/sites-available/parikesit.abimanyu.e18.com.conf```  setelah itu isikan konfigurasi sebagai berikut:
+```<VirtualHost *:80>
+  ServerAdmin webmaster@localhost
+  DocumentRoot /var/www/parikesit.abimanyu.e18
+  ServerName parikesit.abimanyu.e18.com
+  ServerAlias www.parikesit.abimanyu.e18.com
+
+  ErrorLog ${APACHE_LOG_DIR}/error.log
+  CustomLog ${APACHE_LOG_DIR}/access.log combined
+</VirtualHost>
+````
+atau juga bisa dengan menjalankan script sebagai berikut:
+```
+echo -e '<VirtualHost *:80>
+  ServerAdmin webmaster@localhost
+  DocumentRoot /var/www/parikesit.abimanyu.e18
+  ServerName parikesit.abimanyu.e18.com
+  ServerAlias www.parikesit.abimanyu.e18.com
+
+  ErrorLog ${APACHE_LOG_DIR}/error.log
+  CustomLog ${APACHE_LOG_DIR}/access.log combined
+</VirtualHost>' > /etc/apache2/sites-available/parikesit.abimanyu.e18.com.conf
+```
+tidak lupa jalankan perintah ```a2ensite parikesit.abimanyu.e18.com.conf```
+
+kemudian lakukan ```service apache2 restart```
+
+pada client jalankan perintah
+```
+lynx parikesit.abimanyu.e18.com
+curl parikesit.abimanyu.e18.com
+```
+
+## Soal 14
+Pada subdomain tersebut folder /public hanya dapat melakukan directory listing sedangkan pada folder /secret tidak dapat diakses (403 Forbidden).
+
+Pada soal ini kita harus mengizinkan public untuk melakukan directory listing menggunakan ```Options +Indexes``` sedangkang secret kita tidak bisa diakses dengan menggunakan ```Option -Indexes```
+
+lakukan konfigurasi pada folder ```/etc/apache2/sites-available/parikesit.abimanyu.e18.com.conf``` dengan perintah ```nano /etc/apache2/sites-available/parikesit.abimanyu.e18.com.conf```
+kemudian isikan konfigurasi sebagai berikut:
+```<VirtualHost *:80>
+  ServerAdmin webmaster@localhost
+  DocumentRoot /var/www/parikesit.abimanyu.e18
+  ServerName parikesit.abimanyu.e18.com
+  ServerAlias www.parikesit.abimanyu.e18.com
+
+  <Directory /var/www/parikesit.abimanyu.e18/public>
+          Options +Indexes
+  </Directory>
+
+  <Directory /var/www/parikesit.abimanyu.e18/secret>
+          Options -Indexes
+  </Directory>
+
+  Alias "/public" "/var/www/parikesit.abimanyu.e18/public"
+  Alias "/secret" "/var/www/parikesit.abimanyu.e18/secret"
+
+  ErrorLog ${APACHE_LOG_DIR}/error.log
+  CustomLog ${APACHE_LOG_DIR}/access.log combined
+</VirtualHost>
+```
+
+Atau juga bisa menggunakan script di bawah
+```echo -e '<VirtualHost *:80>
+  ServerAdmin webmaster@localhost
+  DocumentRoot /var/www/parikesit.abimanyu.e18
+  ServerName parikesit.abimanyu.e18.com
+  ServerAlias www.parikesit.abimanyu.e18.com
+
+  <Directory /var/www/parikesit.abimanyu.e18/public>
+          Options +Indexes
+  </Directory>
+
+  <Directory /var/www/parikesit.abimanyu.e18/secret>
+          Options -Indexes
+  </Directory>
+
+  Alias "/public" "/var/www/parikesit.abimanyu.e18/public"
+  Alias "/secret" "/var/www/parikesit.abimanyu.e18/secret"
+
+  ErrorLog ${APACHE_LOG_DIR}/error.log
+  CustomLog ${APACHE_LOG_DIR}/access.log combined
+</VirtualHost>' > /etc/apache2/sites-available/parikesit.abimanyu.e18.com.conf
+```
+lakukan restart apache2 ```service apache2 restart```
+
+pada client lakukan perintah
+```lynx parikesit.abimanyu.e18.com/public
+lynx parikesit.abimanyu.e18.com/secret
+```
+## Soal 15
+Buatlah kustomisasi halaman error pada folder /error untuk mengganti error kode pada Apache. Error kode yang perlu diganti adalah 404 Not Found dan 403 Forbidden.
+
+Pada soal ini kita meletakkan dua file html yaitu 403.html dan 404.html pada folder ```parikesit.abimanyu.e18.com/public/error/```
+kemudian lakukan konfigurasi berikut pada Abimanyu
+```
+echo -e '<VirtualHost *:80>
+  ServerAdmin webmaster@localhost
+  DocumentRoot /var/www/parikesit.abimanyu.e18
+  ServerName parikesit.abimanyu.e18.com
+  ServerAlias www.parikesit.abimanyu.e18.com
+
+  <Directory /var/www/parikesit.abimanyu.e18/public>
+          Options +Indexes
+  </Directory>
+
+  <Directory /var/www/parikesit.abimanyu.e18/secret>
+          Options -Indexes
+  </Directory>
+
+  Alias "/public" "/var/www/parikesit.abimanyu.e18/public"
+  Alias "/secret" "/var/www/parikesit.abimanyu.e18/secret"
+
+  ErrorDocument 404 /error/404.html
+  ErrorDocument 403 /error/403.html
+
+  ErrorLog ${APACHE_LOG_DIR}/error.log
+  CustomLog ${APACHE_LOG_DIR}/access.log combined
+</VirtualHost>' > /etc/apache2/sites-available/parikesit.abimanyu.e18.com.conf
+```
+Pada konfigurasi diatas terdapat ```ErrorDocument``` yang digunakan untuk melakukan redirect pada file yang di inginkan pada saat ada masalah waktu membuka domain sebelummnya.
+
+Kemudian lakukan restart ```service apache2 restart```
+
+pada client jalan kan
+```lynx parikesit.abimanyu.e18.com/testerror
+lynx parikesit.abimanyu.e18.com/secret
+```
+
+## Soal 16
+Buatlah suatu konfigurasi virtual host agar file asset www.parikesit.abimanyu.yyy.com/public/js menjadi 
+www.parikesit.abimanyu.yyy.com/js 
+
+untuk soal nomor 16 lakukan konfigurasi pada abimanyu:
+```echo -e '<VirtualHost *:80>
+  ServerAdmin webmaster@localhost
+  DocumentRoot /var/www/parikesit.abimanyu.e18
+  ServerName parikesit.abimanyu.e18.com
+  ServerAlias www.parikesit.abimanyu.e18.com
+
+  <Directory /var/www/parikesit.abimanyu.e18/public>
+          Options +Indexes
+  </Directory>
+
+  <Directory /var/www/parikesit.abimanyu.e18/secret>
+          Options -Indexes
+  </Directory>
+
+  Alias "/public" "/var/www/parikesit.abimanyu.e18/public"
+  Alias "/secret" "/var/www/parikesit.abimanyu.e18/secret"
+  Alias "/js" "/var/www/parikesit.abimanyu.e18/public/js"
+
+  ErrorDocument 404 /error/404.html
+  ErrorDocument 403 /error/403.html
+
+  ErrorLog ${APACHE_LOG_DIR}/error.log
+  CustomLog ${APACHE_LOG_DIR}/access.log combined
+</VirtualHost>' > /etc/apache2/sites-available/parikesit.abimanyu.e18.com.conf
+```
+atau juga bisa menggunakan cara ``` nano /etc/apache2/sites-available/parikesit.abimanyu.e18.com.conf```
+kemudian isi konfigurasi sbb:
+
+```
+<VirtualHost *:80>
+  ServerAdmin webmaster@localhost
+  DocumentRoot /var/www/parikesit.abimanyu.e18
+  ServerName parikesit.abimanyu.e18.com
+  ServerAlias www.parikesit.abimanyu.e18.com
+
+  <Directory /var/www/parikesit.abimanyu.e18/public>
+          Options +Indexes
+  </Directory>
+
+  <Directory /var/www/parikesit.abimanyu.e18/secret>
+          Options -Indexes
+  </Directory>
+
+  Alias "/public" "/var/www/parikesit.abimanyu.e18/public"
+  Alias "/secret" "/var/www/parikesit.abimanyu.e18/secret"
+  Alias "/js" "/var/www/parikesit.abimanyu.e18/public/js"
+
+  ErrorDocument 404 /error/404.html
+  ErrorDocument 403 /error/403.html
+
+  ErrorLog ${APACHE_LOG_DIR}/error.log
+  CustomLog ${APACHE_LOG_DIR}/access.log combined
+</VirtualHost>
+```
+pada client lakukan perintah ```lynx parikesit.abimanyu.e18.com/js```
+
+## Soal 17
+Agar aman, buatlah konfigurasi agar www.rjp.baratayuda.abimanyu.yyy.com hanya dapat diakses melalui port 14000 dan 14400.
+
+pada soal ini lakukan konfigurasi pada Abimanyu dengan membuka ```> /etc/apache2/sites-available/rjp.baratayuda.abimanyu.e18.com.conf```
+
+lalu isi kan:
+```
+<VirtualHost *:14000 *:14400>
+  ServerAdmin webmaster@localhost
+  DocumentRoot /var/www/rjp.baratayuda.abimanyu.e18
+  ServerName rjp.baratayuda.abimanyu.e18.com
+  ServerAlias www.rjp.baratayuda.abimanyu.e18.com
+
+  ErrorDocument 404 /error/404.html
+  ErrorDocument 403 /error/403.html
+
+  ErrorLog ${APACHE_LOG_DIR}/error.log
+  CustomLog ${APACHE_LOG_DIR}/access.log combined
+</VirtualHost>
+```
+Kemudian lakukan juga konfigurasi pada ```nano /etc/apache2/ports.conf```
+
+dan isikan sbb: 
+```
+Listen 80
+Listen 14000
+Listen 14400
+
+<IfModule ssl_module>
+        Listen 443
+</IfModule>
+
+<IfModule mod_gnutls.c>
+        Listen 443
+</IfModule>
+
+# vim: syntax=apache ts=4 sw=4 sts=4 sr noet
+```
+jalankan perintah ```a2ensite rjp.baratayuda.abimanyu.e18.com.conf```
+
+lalu restart ```service apache2 restart```
+
+pada client jalankan 
+```lynx rjp.baratayuda.abimanyu.e18.com:14000
+lynx rjp.baratayuda.abimanyu.e18.com:14400
+```
+## Soal 17
 ## KENDALA PENGERJAAN
 Kendala yang dialami yaitu terkadang kurang teliti untuk melakukan konfigurasi
